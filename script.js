@@ -9,24 +9,12 @@ const DECREMENT = 'DECREMENT';
 const RESET = 'RESET';
 
 // Action creators
-const increment = () => {
-    console.log('Action: INCREMENT');
-    return { type: INCREMENT };
-};
-
-const decrement = () => {
-    console.log('Action: DECREMENT');
-    return { type: DECREMENT };
-};
-
-const reset = () => {
-    console.log('Action: RESET');
-    return { type: RESET };
-};
+const increment = () => ({ type: INCREMENT });
+const decrement = () => ({ type: DECREMENT });
+const reset = () => ({ type: RESET });
 
 // State counterReducer
 const counterReducer = (state = initialState, action) => {
-    console.log('Reducer received action:', action);
     switch (action.type) {
         case INCREMENT:
             return { ...state, count: state.count + 1 };
@@ -54,6 +42,10 @@ class Store {
     dispatch(action) {
         this.state = this.reducer(this.state, action);
         this.listeners.forEach(listener => listener(this.state));
+        
+        // Log action and new state
+        console.log(`Action dispatched: ${action.type}`);
+        console.log('New state:', this.state);
     }
 
     subscribe(listener) {
@@ -67,15 +59,21 @@ class Store {
 // Create a store instance
 const store = new Store(counterReducer);
 
+// Subscribe to log state updates
 store.subscribe((state) => {
-    // Just logging the state without any async operation
+    // This listener can be used to log or perform other actions
     console.log('Current state:', state);
 });
 
+// Button event listeners
+document.getElementById('increment').addEventListener('click', () => {
+    store.dispatch(increment());
+});
 
-// Dispatch some actions
-store.dispatch(increment()); // Current state: { count: 1 }
-store.dispatch(increment()); // Current state: { count: 2 }
-store.dispatch(decrement()); // Current state: { count: 1 }
-store.dispatch(reset());      // Current state: { count: 0 }
+document.getElementById('decrement').addEventListener('click', () => {
+    store.dispatch(decrement());
+});
 
+document.getElementById('reset').addEventListener('click', () => {
+    store.dispatch(reset());
+});
