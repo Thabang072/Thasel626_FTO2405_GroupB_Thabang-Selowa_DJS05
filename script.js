@@ -67,13 +67,15 @@ class Store {
 // Create a store instance
 const store = new Store(counterReducer);
 
-// Subscribe to state changes
 store.subscribe((state) => {
+    // Just logging the state without any async operation
     console.log('Current state:', state);
 });
+
 
 // Dispatch some actions
 store.dispatch(increment()); // Current state: { count: 1 }
 store.dispatch(increment()); // Current state: { count: 2 }
 store.dispatch(decrement()); // Current state: { count: 1 }
 store.dispatch(reset());      // Current state: { count: 0 }
+
